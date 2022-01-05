@@ -19,7 +19,7 @@ fetch( 'http://localhost:3000/api/products/')
         data.forEach(product => {
           products += `
           
-          <a href="./product.html?id=${product.id}>
+          <a href="./product.html?id=${product._id}">
             <article>
                <img src="${product.imageUrl}" alt="${product.name}"> 
               <h3 class="productName">${product.name} </h3>
@@ -29,8 +29,9 @@ fetch( 'http://localhost:3000/api/products/')
           `;
 
         } )
+        productsDiv.innerHTML = products;
       });
-      productsDiv.innerHTML = products;
+      
     }
   )
   .catch(function(err) {
