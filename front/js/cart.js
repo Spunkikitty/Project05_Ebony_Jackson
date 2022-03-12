@@ -104,44 +104,56 @@ const loadCart = () => {
   };
   
   
-  const validateData = () => {
-  
-  
-      /* CONTACT INPUTS */
-  let firstName = document.getElementById("firstName").value;
-  let name = document.getElementById("lastName").value;
-  let address = document.getElementById("address").value;
-  let city = document.getElementById("city").value;
-  let email = document.getElementById("email").value;
-  
-      //Ensure all field are provided
-  
-      if(firstName =="" || name =="" || address =="" || city=="" ||  email ==""){
-  
-          return "EMPTY";
-      }else{
-  
-          //verify the lenght 
-          if(firstName.length <3 || name.length <3 || address <3 || city < 3 || email.length <3 ){
-            return "LENGHT";
-          }
-          //verify email
-          const re = /\S+@\S+\.\S+/g;
-  
-          if(!re.test(email)){
-  
-            return "EMAIL"
-          }else{
-            return "OK";
-          }
-          
-  
-    
+
+  //validate an input
+    const validateInput = (Input) =>{
+      console.log(Input);
+      let value = document.getElementById(`${Input}`).value;
+      let erroMsg = document.getElementById(`${Input}ErrorMsg`);
+      erroMsg.innerHTML = "";
+      let output = true;S
+      
+      //validate empty value
+      if(value==""){
+        erroMsg.innerHTML =`Please kindly provide the ${Input}`;
+        output = false;
       }
+       //validate length 
+        if(value.length <3) {
+          erroMsg.innerHTML += `Please ensure the ${Input} is at least 3 characters`;
+          output = false;
+        }
+    //validate email
+    if(Input =="email"){
+      
+      //verify email
+      const re = /\S+@\S+\.\S+/g;
+      
+      if(!re.test(email)){
+        erroMsg.innerHTML += `Please provide a valid email`;
+           output = false;
+      }
+    } 
+    return output; 
   
   }
   
-  
+   //Validate Function 
+
+   const validateAll = (contact) =>{
+     let output = true;
+
+     for(const [key, value] of Object.entries(contact)){
+       if(validateInput(`${key}`)==false){
+         output = false;
+         break; 
+       }
+     }
+     return output;
+   }
+
+
+
   //Function that post the order 
   
   const postOrder = () =>{
@@ -153,45 +165,21 @@ const loadCart = () => {
   let city = document.getElementById("city").value;
   let email = document.getElementById("email").value;
   
-    contact ={firstName:firstName,lastName:name,address:address,city:city,email:email};
+   let contact ={firstName:firstName,lastName:name,address:address,city:city,email:email};
+
+
+   if( validateAll(contact)){
+     alert('post order');
+   }
   
+  //if( validateInput("firstName") && validateInput("lastName") && validateInput("address") && validateInput("city") && valdiateInput("email")) {
+
+    //alert('post order');
+  //}
   
-    console.log(contact);
-    //validate input
-    switch(validateData()){
-  
-      case "EMPTY":
-  
-        alert("please kindly provide all field!");
-  
-      break;
-  
-      case "LENGHT":
-  
-        alert("please kindly ensure the lenght of your input is beyond 2 characters");
-  
-      break;
-  
-      case "EMAIL":
-  
-        alert("invalid email address");
-  
-      break;
-  
-      default:
-  
-  
-      //POST 
-  
-      alert('ready to post');
-  
-      break;
-  
-    }
-  
-  
-  
-  }
+    //console.log(contact);
+    
+}
   
   let orderBtn = document.getElementById("order");
   
