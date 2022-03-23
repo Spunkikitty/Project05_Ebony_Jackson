@@ -1,13 +1,12 @@
-Promise.resolve()
-  .then(() => setTimeout(() => callback(null, 'data'), 0))
-  .catch((err) => setTimeout(() => callback(err.message, null), 0))
+const queryString = window.location.search;
 
-  function myValidation() {
-    let confirmation;
-    if (confirm("Thank you for your purchase!")) {
-      confirmNumber = "Your confirmation number is";
-    } else {
-      txt = "Your order did not go through !";
-    }
-    document.getElementById("orderId").innerHTML = txt;
-  }
+const urlParams = new URLSearchParams(queryString);
+
+const orderId = urlParams.get('orderId');
+  let orderSpan = document.getElementById('orderId');
+      orderSpan.innerHTML = orderId;
+
+
+
+      //clear the cart local storage
+      localStorage.clear();

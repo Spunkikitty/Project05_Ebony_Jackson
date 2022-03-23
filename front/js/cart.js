@@ -111,7 +111,7 @@ const loadCart = () => {
       let value = document.getElementById(`${Input}`).value;
       let erroMsg = document.getElementById(`${Input}ErrorMsg`);
       erroMsg.innerHTML = "";
-      let output = true;S
+      let output = true;
       
       //validate empty value
       if(value==""){
@@ -125,11 +125,9 @@ const loadCart = () => {
         }
     //validate email
     if(Input =="email"){
-      
-      //verify email
       const re = /\S+@\S+\.\S+/g;
       
-      if(!re.test(email)){
+      if(!re.test(value)){
         erroMsg.innerHTML += `Please provide a valid email`;
            output = false;
       }
@@ -146,7 +144,7 @@ const loadCart = () => {
      for(const [key, value] of Object.entries(contact)){
        if(validateInput(`${key}`)==false){
          output = false;
-         break; 
+          
        }
      }
      return output;
@@ -167,11 +165,47 @@ const loadCart = () => {
   
    let contact ={firstName:firstName,lastName:name,address:address,city:city,email:email};
 
+   
 
-   if( validateAll(contact)){
-     alert('post order');
+   let products = JSON.parse(localStorage.getItem("cart"));
+
+   products.forEach((entry,index) =>{
+     products[index]=entry._id;
+   })
+   let postData = {contact:contact,products:products};
+
+   if(validateAll(contact)){
+ 
+     
+     const options = {
+       method: 'POST',
+       headers: {
+       'Content-Type': 'application/json',
+       },
+       body: JSON.stringify(postData),
+       };
+ 
+ 
+ 
+     fetch('http://localhost:3000/api/products/order', options)
+     .then(data => {
+         if (!data.ok) {
+           throw Error(data.status);
+         }
+         return data.json();
+         }).then(response => {
+         console.log(response);
+ 
+         window.location.href=window.location.origin+"/front/html/confirmation.html?orderId="+response.orderId ;
+         
+       
+         }).catch(e => {
+         console.log(e);
+         });
+ 
    }
-  
+
+    
   //if( validateInput("firstName") && validateInput("lastName") && validateInput("address") && validateInput("city") && valdiateInput("email")) {
 
     //alert('post order');
@@ -179,7 +213,7 @@ const loadCart = () => {
   
     //console.log(contact);
     
-}
+  }
   
   let orderBtn = document.getElementById("order");
   
